@@ -18,9 +18,8 @@ main.o: main.c algo.o edges.o graph.o
 algo.o: algo.h algo.c
 	$(CC) $(FLAGS) -c algo.c
 
-Edge.o: Edge.h edges.c
+edges.o: edges.h edges.c
 	$(CC) $(FLAGS) -c edges.c
 
 graph.o: graph.h graph.c edges.h
 	$(CC) $(FLAGS) -c graph.c
-
