@@ -12,15 +12,15 @@ clean:
 graph: main.o
 	$(CC) $(FLAGS) -o graph main.c
 
-main.o: main.c algo.o Edge.o graph.o
+main.o: main.c algo.o edges.o graph.o
 	$(CC) $(FLAGS) -c main.c
 
 algo.o: algo.h algo.c
 	$(CC) $(FLAGS) -c algo.c
 
-Edge.o: Edge.h Edge.c
-	$(CC) $(FLAGS) -c Edge.c
+Edge.o: Edge.h edges.c
+	$(CC) $(FLAGS) -c edges.c
 
-graph.o: graph.h graph.c Edge.h
+graph.o: graph.h graph.c edges.h
 	$(CC) $(FLAGS) -c graph.c
 
