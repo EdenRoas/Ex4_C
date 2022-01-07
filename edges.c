@@ -1,118 +1,66 @@
+#include <stdlib.h>
 #include <stdio.h>
+#include "edges.h"
 #include "graph.h"
-#include "nodes.h"
 
-edge *creat_edge(node *dest, int weight)
-{
-    edge *new_edge = (edge *)malloc(sizeof(edge));
-    if (!new_edge)
-    {
-        return NULL;
+edge* create_edge(pnode node, int weight){
+    edge* n=(edge*)malloc(sizeof(edge));
+    if(n){
+        n -> weight = weight;
+        n -> endpoint = node;
+        n -> next = NULL;
     }
-    new_edge->weight = weight;
-    new_edge->endpoint = dest;
-    new_edge->next = NULL;
-    return new_edge;
+    return n;
 }
-
-void creat_first_e(node **head, int src_id, node *dest, int weight)
-{
-    if (!head)
-    { //if the graph is empty
+void add(edge** H,pnode node, int data){
+    edge* n = create_edge(node, data);
+    if(!n){
+        printf("no memory!");
         return;
     }
-    node *head_copy = *head;
-    while (head_copy)
-    {
-        if (head_copy->node_num == src_id)
-        {
-            edge *e = create_edge(dest, weight);
-            if (!e)
-            {
-                printf("Not enough memory!");
-                return;
-            }
-            edge *tmp = head_copy->edges;
-            e->next = tmp;
-            head_copy->edges = e;
-            return;
-        }
-        head_copy = head_copy->next;
-    }
-}
-
-void delete_edge(edge **del_e)
-{
-    if (!(*del_e))
-    {
+    if(!*H){
+        *H = n;
         return;
     }
-    if (!(*del_e)->next)
-    {
-        // *H=NULL;
-        free(del_e);
-    }
-    else
-    {
-        while ((*del_e)->next != NULL)
-        {
-            edge *tmp = *del_e;
-            *del_e = (*del_e)->next;
-            free(tmp);
-        }
-        edge *tmp = *del_e;
-        *del_e = (*del_e)->next;
-        tmp = NULL;
+    edge* tmp = *H;
+    while(tmp->next)
+        tmp = tmp->next;
+    tmp->next = n;
+}
+
+void delete(edge** H){
+    while(*H){
+        edge* tmp = *H;
+        *H = (*H)->next;
         free(tmp);
-        del_e = NULL;
-        free(del_e);
     }
 }
-void print_list_edges(edge **e)
-{
-    while (*e)
-    {
-        if ((*e)->next != NULL)
-        {
-            printf(" n-%d, w-%d -> ", (*e)->endpoint->node_num, (*e)->weight);
-            (*e) = (*e)->next;
-        }
-        else
-        {
-            printf("n-%d, w-%d ", (*e)->endpoint->node_num, (*e)->weight);
-            (*e) = (*e)->next;
-        }
+
+void print_list(edge* H){
+    while(H){
+        printf("%d -> ", H->endpoint->node_num);
+        H = H->next;
     }
+    printf("|");
 }
-void remove_edge(edge **head, node *n)
-{
-    if (!*head)
-    {
+
+void remove_edge(edge** H, int dest){
+    if(!*H)
+        return;
+    if((*H)->endpoint->node_num== dest){
+        edge* tmp = *H;
+        *H = (*H)->next;
+        free(tmp);
+    }
+    edge* tmp = *H;
+    if(!tmp){
         return;
     }
-    if ((*head)->endpoint->node_num == n->node_num)
-    { //if we want to delete the first edge
-        edge *temp = *head;
-        *head = (*head)->next;
-        temp->endpoint = NULL;
-        temp->next = NULL;
-        free(temp);
-        //printf("deletd the first edge\n");
-    }
-    else
-    {
-        edge *temp = *head;
-        while (temp->next && (temp->next)->endpoint != n->node_num)
-        {
-            temp = temp->next;
-        }
-        if (!temp->next)
-        {
-            return;
-        }
-        edge *temp2 = temp->next;
-        temp->next = temp->next->next;
-        temp = NULL;
-        free(temp2);
-    }
+    while(tmp->next && tmp->next->endpoint->node_num != dest)
+        tmp = tmp->next;
+    if(!tmp->next)
+        return;
+    edge* tmp2 = tmp->next;
+    tmp->next = tmp->next->next;
+    free(tmp2);
 }

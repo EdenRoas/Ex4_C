@@ -1,16 +1,9 @@
-#ifndef ALGO_
-#define ALGO_
+#ifndef __ALGO_H__
+#define __ALGO_H__
+#include "edges.h"
+#include "graph.h"
 
-# include "nodes.h"
-# include"edges.h"
-
-
-void build_graph_cmd(pnode *head);
-void insert_node_cmd(pnode *head);
-void delete_node_cmd(pnode *head);
-void printGraph_cmd(pnode head); //for self debug
-void deleteGraph_cmd(pnode* head);
-void shortsPath_cmd(pnode head);
-void TSP_cmd(pnode head);
+int shortest_path(pnode* , int, int);
+int TSP(pnode*);
 
 #endif
