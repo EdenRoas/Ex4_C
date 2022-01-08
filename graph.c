@@ -3,91 +3,90 @@
 #include "graph.h"
 #include "edges.h"
 
-//typedef struct GRAPH_NODE_ *pnode ;
 
-node* create_node(int id) {
-    node* n = (node *) malloc(sizeof(node));
-    if (n) {
-        n->node_num = id;
-        n->edges = NULL;
-        n->next = NULL;
-        return n;
+node* create_node(int index) {
+    node* new_node = (node *) malloc(sizeof(node));
+    if (new_node) {
+        new_node->node_num = index;
+        new_node->edges = NULL;
+        new_node->next = NULL;
+        return new_node;
     }
     exit(1);
 }
 
-void insert_node_cmd(node** head, pnode node){
-    if(!node){
+void insert_node_cmd(node** head, pnode node)  //insert a node to the list
+{
+    if(node == NULL){
         printf("no memory!");
         return;
     }
-    if(!*head){
+    if(*head == NULL)
+    {
         *head = node;
         return;
     }
-    pnode tmp = *head;
-    while(tmp->next) {
-        tmp = tmp->next;
+    pnode temp = *head;
+    while(temp->next) 
+    {
+        temp = temp->next;
     }
-    tmp->next = node;
+    temp->next = node;
 }
 
-void delete_node_cmd(pnode* head, pnode node){
-    if(!*head)
+void delete_node_cmd(pnode* head, pnode node){ //delete the node node
+    if(*head == NULL)
         return;
     if((*head)->node_num == node->node_num){
-        pnode tmp = *head;
+        pnode temp = *head;
         *head = (*head)->next;
-        //free edges
-        pedge edge_tmp = tmp ->edges;
-        while(edge_tmp){
-            pedge remove_edges = edge_tmp;
-            edge_tmp = edge_tmp -> next;
+        pedge edge_temp = temp ->edges;
+        while(edge_temp){ //cuts the edges from the deleted node
+            pedge remove_edges = edge_temp;
+            edge_temp = edge_temp -> next;
             free(remove_edges);
         }
-        tmp ->edges = NULL;
-        //remove node
-        pnode tmp2 = tmp;
-        tmp = tmp->next;
-        pnode tmp3 = *head;
-        while(tmp3){
-            remove_edge(&(tmp3->edges), node->node_num);
-            tmp3 = tmp3 -> next;
+        temp ->edges = NULL;
+        pnode temp2 = temp;
+        temp = temp->next;
+        pnode temp_endpoint = *head;
+        while(temp_endpoint){
+            remove_edge(&(temp_endpoint->edges), node->node_num);
+            temp_endpoint = temp_endpoint -> next;
         }
-        free(tmp2);
+        free(temp2); // now we can delete the node
         if(!*head){
             *head = NULL;
         }
         return;
     }
-    pnode tmp = *head;
-    while(tmp->next && tmp->next->node_num != node->node_num)
-        tmp = tmp->next;
-    if(!tmp->next){
+    pnode temp = *head;
+    while(temp->next && temp->next->node_num != node->node_num)
+        temp = temp->next;
+    if(!temp->next){
         return;
     }
     //free edges
-    pedge edge_tmp = tmp->next->edges;
+    pedge edge_tmp = temp->next->edges;
     while(edge_tmp){
         pedge remove_edges = edge_tmp;
         edge_tmp = edge_tmp -> next;
         free(remove_edges);
     }
-    tmp -> next -> edges = NULL;
+    temp -> next -> edges = NULL;
     //remove node
-    pnode tmp2 = tmp -> next;
-    tmp -> next = tmp -> next -> next;
-    pnode tmp3 = *head;
-    while(tmp3){
-        remove_edge(&(tmp3->edges), node->node_num);
-        tmp3 = tmp3 -> next;
+    pnode temp2 = temp -> next;
+    temp -> next = temp -> next -> next;
+    pnode temp_endpoint = *head;
+    while(temp_endpoint){
+        remove_edge(&(temp_endpoint->edges), node->node_num);
+        temp_endpoint = temp_endpoint -> next;
     }
-    free(tmp2);
+    free(temp2);
     return;
 }
 
-void printGraph_cmd(pnode head){
-    // pnode tmp = head;
+void printGraph_cmd(pnode head){ //for us
     while(head){
         printf("%d (", head -> node_num);
         print_list(head -> edges);
@@ -95,7 +94,6 @@ void printGraph_cmd(pnode head){
         head = head->next;
     }
     printf("||\n");
-    // free(tmp);
 }
 
 void deleteGraph_cmd(pnode* head){

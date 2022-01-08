@@ -5,7 +5,6 @@
 #include "algo.c"
 
 int main() {
-    //A 4 n 0 2 5 3 3 n 2 0 4 1 1 n 1 3 7 0 2 n 3 T 3 2 1 3 S 2 0
     node* graph = NULL;
     int read=getchar();
     int numOfNodes, i, id, dest, weight;
@@ -76,17 +75,14 @@ int main() {
                         break;
                     }
                 }
-//                printf("create graph: ");
-//                printGraph_cmd(graph);
                 break;
             case 'B':
-                // B 5 0 4 2 1
+
                 read = getchar();
                 int id;
                 scanf("%d", &id);
 
                 pnode current_node = graph;
-                // check if node already exists
                 while (current_node) {
                     if (current_node->node_num == id) {
                         break;
@@ -156,7 +152,7 @@ int main() {
                 int src, dest, short_path;
                 scanf("%d",&src);
                 scanf("%d",&dest);
-                short_path=shortest_path(&graph, src, dest);
+                short_path=ShortestPath(&graph, src, dest);
                 if(first==0){
                     printf("Dijsktra shortest path: %d \n",short_path);
                     first=1;

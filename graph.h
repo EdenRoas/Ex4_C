@@ -3,12 +3,11 @@
 
 typedef struct edge_ *pedge;
 
-// LinkedList of nodes
 typedef struct GRAPH_NODE_ {
     int node_num; //id
     pedge edges; //list of edges
     struct GRAPH_NODE_ *next;
-} node, *pnode; //head of the list
+} node, *pnode; //head
 
 node* create_node(int id);
 void build_graph_cmd(pnode *head);

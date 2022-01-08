@@ -3,7 +3,7 @@
 #include <limits.h>
 #include "algo.h"
 
-int shortest_path(pnode* head, int src, int dest){
+int ShortestPath(pnode* head, int src, int dest){
     int node_max_size = 0;
     pnode tmp = *head;
     while(tmp){
@@ -61,6 +61,8 @@ int shortest_path(pnode* head, int src, int dest){
     }
     return dist[dest];
 }
+
+
 int TSP(pnode *head){
     int size = 0;
     scanf("%d", &size);
@@ -89,7 +91,7 @@ int TSP(pnode *head){
             for(j=0;j<size;j++) {
                 if (nodes_temp[j] != -1) {
                     tmp = *head;
-                    ans = shortest_path(&tmp, src_id,nodes_temp[j]);
+                    ans = ShortestPath(&tmp, src_id,nodes_temp[j]);
                     if(ans<min_current && ans!=-1 && ans>0){
                         min_current=ans;
                         current_dest=j;
