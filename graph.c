@@ -54,7 +54,7 @@ void delete_node_cmd(pnode* head, pnode node){ //delete the node node
             remove_edge(&(temp_endpoint->edges), node->node_num);
             temp_endpoint = temp_endpoint -> next;
         }
-        free(temp2); // now we can delete the node
+        free(temp2); 
         if(!*head){
             *head = NULL;
         }
@@ -67,10 +67,10 @@ void delete_node_cmd(pnode* head, pnode node){ //delete the node node
         return;
     }
     //free edges
-    pedge edge_tmp = temp->next->edges;
-    while(edge_tmp){
-        pedge remove_edges = edge_tmp;
-        edge_tmp = edge_tmp -> next;
+    pedge edge_temp = temp->next->edges;
+    while(edge_temp){
+        pedge remove_edges = edge_temp;
+        edge_temp = edge_temp -> next;
         free(remove_edges);
     }
     temp -> next -> edges = NULL;
