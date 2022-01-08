@@ -4,61 +4,61 @@
 #include "graph.h"
 
 edge* create_edge(pnode node, int weight){
-    edge* n=(edge*)malloc(sizeof(edge));
-    if(n){
-        n -> weight = weight;
-        n -> endpoint = node;
-        n -> next = NULL;
+    edge* new_edge=(edge*)malloc(sizeof(edge));
+    if(new_edge){
+        new_edge -> weight = weight;
+        new_edge -> endpoint = node;
+        new_edge -> next = NULL;
     }
-    return n;
+    return new_edge;
 }
-void add(edge** H,pnode node, int data){
-    edge* n = create_edge(node, data);
-    if(!n){
+void add(edge** head,pnode node, int data){
+    edge* new_edge = create_edge(node, data);
+    if(new_edge==NULL){
         printf("no memory!");
         return;
     }
-    if(!*H){
-        *H = n;
+    if(!*head){
+        *head = new_edge;
         return;
     }
-    edge* tmp = *H;
+    edge* tmp = *head;
     while(tmp->next)
         tmp = tmp->next;
-    tmp->next = n;
+    tmp->next = new_edge;
 }
 
-void delete(edge** H){
-    while(*H){
-        edge* tmp = *H;
-        *H = (*H)->next;
+void delete(edge** head){
+    while(*head){
+        edge* tmp = *head;
+        *head = (*head)->next;
         free(tmp);
     }
 }
 
-void print_list(edge* H){
-    while(H){
-        printf("%d -> ", H->endpoint->node_num);
-        H = H->next;
+void print_list(edge* head){
+    while(head){
+        printf("%d -> ", head->endpoint->node_num);
+        head = head->next;
     }
     printf("|");
 }
 
-void remove_edge(edge** H, int dest){
-    if(!*H)
+void remove_edge(edge** head, int dest){
+    if(*head==NULL)
         return;
-    if((*H)->endpoint->node_num== dest){
-        edge* tmp = *H;
-        *H = (*H)->next;
+    if((*head)->endpoint->node_num== dest){
+        edge* tmp = *head;
+        *head = (*head)->next;
         free(tmp);
     }
-    edge* tmp = *H;
+    edge* tmp = *head;
     if(!tmp){
         return;
     }
     while(tmp->next && tmp->next->endpoint->node_num != dest)
         tmp = tmp->next;
-    if(!tmp->next)
+    if(tmp->next == NULL)
         return;
     edge* tmp2 = tmp->next;
     tmp->next = tmp->next->next;
