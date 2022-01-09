@@ -4,181 +4,197 @@
 #include "edges.c"
 #include "algo.c"
 
-int main() {
-    node* graph = NULL;
-    int read=getchar();
-    int numOfNodes, i, id, dest, weight;
-    int succeed;
-    int first=0;
+int main()
+{
+    node *graph = NULL;
+    int ot = getchar();
+    int numOfNodes, i, index, dest, weight;
+    int madeit;
+    int first = 0;
     char n;
-    while(65<=read && read<=90) {
-        switch (read) {
-            case 'A':
-                if(graph!=NULL){
-                    deleteGraph_cmd(&graph);
+    while (65 <= ot && ot <= 90)
+    {
+        switch (ot)
+        {
+        case 'A':
+            if (graph != NULL)
+            {
+                deleteGraph_cmd(&graph);
+            }
+            getchar();
+            scanf("%d", &numOfNodes);
+            scanf("%c", &n);
+            scanf("%c", &n);
+            i = 0;
+            for (i = 0; i < numOfNodes; i++)
+            {
+                scanf("%d", &index);
+                if (i == 0)
+                {
+                    graph = create_node(index);
                 }
-                getchar();
-                scanf("%d", &numOfNodes);
-                scanf("%c", &n);
-                scanf("%c", &n);
-                i = 0;
-                for (i = 0; i < numOfNodes; i++) {
-                    scanf("%d", &id);
-                    if (i == 0) {
-                        graph = create_node(id);
-                    }
-                    pnode current_node = graph;
-                    // check if node exists
-                    while (current_node) {
-                        if (current_node->node_num == id) {
-                            break;
-                        }
-                        current_node = current_node->next;
-                    }
-                    // if not create it
-                    if (!current_node) {
-                        current_node = create_node(id);
-                        insert_node_cmd(&graph, current_node);
-                    }
-                    // create the edges
-                    succeed=scanf("%d",&dest);
-                    while (succeed) {
-                        scanf("%d", &weight);
-                        pnode tmp = graph;
-                        // check if dest node exists
-                        while (tmp) {
-                            if (tmp->node_num == dest) {
-                                break;
-                            }
-                            tmp = tmp->next;
-                        }
-                        // if so
-                        if (tmp) {
-                            pnode node_dst = tmp;
-                            add(&current_node->edges, node_dst, weight);
-                        }
-                            // else create it
-                        else {
-                            pnode node_dst = create_node(dest);
-                            insert_node_cmd(&graph, node_dst);
-                            add(&current_node->edges, node_dst, weight);
-                        }
-                        if(getchar()==' '){
-                            succeed=scanf("%d",&dest);
-                        }
-                        else{
-                            break;
-                        }
-                    }
-                    read = getc(stdin);
-                    if (read != 'n') {
-                        break;
-                    }
-                }
-                break;
-            case 'B':
-
-                read = getchar();
-                int id;
-                scanf("%d", &id);
-
                 pnode current_node = graph;
-                while (current_node) {
-                    if (current_node->node_num == id) {
+                while (current_node)
+                {
+                    if (current_node->node_num == index)
+                    {
                         break;
                     }
                     current_node = current_node->next;
                 }
-                // if not create it
-                if (!current_node) {
-                    current_node = create_node(id);
+
+                if (!current_node)
+                {
+                    current_node = create_node(index);
                     insert_node_cmd(&graph, current_node);
                 }
-                // if it exists, override the out edges with the new given ones
-                pedge edge_tmp = current_node -> edges;
-                while(edge_tmp){
-                    pedge remove_edges = edge_tmp;
-                    edge_tmp = edge_tmp -> next;
-                    free(remove_edges);
-                }
-                current_node ->edges = NULL;
-
-                // create new edges:
-                int destN;
-                int weight;
-                scanf("%d", &destN);
-                scanf("%d", &weight);
-
-                while(read == 32){
-                    pnode dest_node = graph;
-                    // check if DestNode exists
-                    while (dest_node) {
-                        if (dest_node->node_num == destN) {
+                madeit = scanf("%d", &dest);
+                while (madeit)
+                {
+                    scanf("%d", &weight);
+                    pnode tmp = graph;
+                    while (tmp)
+                    {
+                        if (tmp->node_num == dest)
+                        {
                             break;
                         }
-                        dest_node = dest_node->next;
+                        tmp = tmp->next;
                     }
-                    // if not create it
-                    if (!dest_node) {
-                        dest_node = create_node(destN);
-                        insert_node_cmd(&graph, dest_node);
+                    // if so
+                    if (tmp)
+                    {
+                        pnode node_dst = tmp;
+                        add(&current_node->edges, node_dst, weight);
                     }
-
-                    // add the new edge to the new node
-                    add(&current_node->edges, dest_node, weight);
-
-                    scanf("%d", &destN);
-                    scanf("%d", &weight);
-                    read = getchar();
+                    else
+                    {
+                        pnode node_dst = create_node(dest);
+                        insert_node_cmd(&graph, node_dst);
+                        add(&current_node->edges, node_dst, weight);
+                    }
+                    if (getchar() == ' ')
+                    {
+                        madeit = scanf("%d", &dest);
+                    }
+                    else
+                    {
+                        break;
+                    }
                 }
-//                printf("added node - %d: ", id);
-//                printGraph_cmd(graph);
-                break;
-            case 'D':
-                getchar();
-                int node;
-                scanf("%d", &node);
-                pnode n = create_node(node);
-                delete_node_cmd(&graph, n);
-//                printf("deleted node - %d: ", node);
-//                printGraph_cmd(graph);
-                free(n);
-                getchar();
-                read = getchar();
-                break;
-            case 'S':
-//                printf("S");
-                getchar();
-                int src, dest, short_path;
-                scanf("%d",&src);
-                scanf("%d",&dest);
-                short_path=ShortestPath(&graph, src, dest);
-                if(first==0){
-                    printf("Dijsktra shortest path: %d \n",short_path);
-                    first=1;
-                } else{
-                    printf("Dijsktra shortest path: %d \n",short_path);
+                ot = getc(stdin);
+                if (ot != 'n')
+                {
+                    break;
                 }
-                getchar();
-                read = getchar();
-                break;
-            case 'T': {
-//                printf("T");
-                getchar();
-                int tsp;
-                tsp = TSP(&graph);
-                if(first==0){
-                    printf("TSP shortest path: %d \n",tsp);
-                    first=1;
-                } else{
-                    printf("TSP shortest path: %d \n",tsp);
-                }
-                getchar();
-                read = getchar();
-                break;
             }
-            default:
-                break;
+            break;
+        case 'B':
+
+            ot = getchar();
+            int index;
+            scanf("%d", &index);
+
+            pnode current_node = graph;
+            while (current_node)
+            {
+                if (current_node->node_num == index)
+                {
+                    break;
+                }
+                current_node = current_node->next;
+            }
+            if (!current_node)
+            {
+                current_node = create_node(index);
+                insert_node_cmd(&graph, current_node);
+            }
+            pedge edge_tmp = current_node->edges;
+            while (edge_tmp)
+            {
+                pedge remove_edges = edge_tmp;
+                edge_tmp = edge_tmp->next;
+                free(remove_edges);
+            }
+            current_node->edges = NULL;
+
+            int destN;
+            int weight;
+            scanf("%d", &destN);
+            scanf("%d", &weight);
+
+            while (ot == 32)
+            {
+                pnode dest_node = graph;
+                while (dest_node)
+                {
+                    if (dest_node->node_num == destN)
+                    {
+                        break;
+                    }
+                    dest_node = dest_node->next;
+                }
+                if (!dest_node)
+                {
+                    dest_node = create_node(destN);
+                    insert_node_cmd(&graph, dest_node);
+                }
+
+                add(&current_node->edges, dest_node, weight);
+
+                scanf("%d", &destN);
+                scanf("%d", &weight);
+                ot = getchar();
+            }
+            break;
+        case 'D':
+            getchar();
+            int node;
+            scanf("%d", &node);
+            pnode n = create_node(node);
+            delete_node_cmd(&graph, n);
+            free(n);
+            getchar();
+            ot = getchar();
+            break;
+        case 'S':
+            getchar();
+            int src, dest, short_path;
+            scanf("%d", &src);
+            scanf("%d", &dest);
+            short_path = ShortestPath(&graph, src, dest);
+            if (first == 0)
+            {
+                printf("Dijsktra shortest path: %d \n", short_path);
+                first = 1;
+            }
+            else
+            {
+                printf("Dijsktra shortest path: %d \n", short_path);
+            }
+            getchar();
+            ot = getchar();
+            break;
+        case 'T':
+        {
+            getchar();
+            int tsp;
+            tsp = TSP(&graph);
+            if (first == 0)
+            {
+                printf("TSP shortest path: %d \n", tsp);
+                first = 1;
+            }
+            else
+            {
+                printf("TSP shortest path: %d \n", tsp);
+            }
+            getchar();
+            ot = getchar();
+            break;
+        }
+        default:
+            break;
         }
     }
 

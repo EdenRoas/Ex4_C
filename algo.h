@@ -3,7 +3,7 @@
 #include "edges.h"
 #include "graph.h"
 
-int ShortestPath(pnode* , int, int);
-int TSP(pnode*);
+int ShortestPath(pnode *, int, int);
+int TSP(pnode *);
 
 #endif
