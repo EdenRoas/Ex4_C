@@ -1,25 +1,29 @@
 CC=gcc
-FLAGS= -Wall -g
 
-#make all
+
+
 all: graph
 
+
+graph: main.o
+	$(CC) -Wall -g -o graph main.c
+
+main.o: main.c algo.o edges.o graph.o
+	$(CC) -Wall -g -c main.c
+
+algo.o: algo.h algo.c
+	$(CC) -Wall -g -c algo.c
+
+edges.o: edges.h edges.c
+	$(CC) -Wall -g -c edges.c
+
+graph.o: graph.h graph.c edges.h
+	$(CC) -Wall -g -c graph.c
+
 .PHONY: clean
-#make clean
+
 clean:
 	rm -f *.o *.a *.so graph
 
-graph: main.o
-	$(CC) $(FLAGS) -o graph main.c
 
-main.o: main.c algo.o edges.o graph.o
-	$(CC) $(FLAGS) -c main.c
-
-algo.o: algo.h algo.c
-	$(CC) $(FLAGS) -c algo.c
-
-edges.o: edges.h edges.c
-	$(CC) $(FLAGS) -c edges.c
-
-graph.o: graph.h graph.c edges.h
-	$(CC) $(FLAGS) -c graph.c
+	
