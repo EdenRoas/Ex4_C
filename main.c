@@ -6,14 +6,11 @@
 
 int main() {
     node* graph = NULL;
-    
+    int ot = getchar();
     int numOfNodes, i, index, dest, weight;
     int madeit;
     int first=0;
     char n;
-    //enum choose{A=1, B, D, S, T};
-    int ot = getchar();
-    //choose = ot;
     while(65<=ot && ot<=90) {
         switch (ot) {
             case 'A':
